@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getSession } from "@/lib/session";
 import { fhirFetch } from "@/lib/fhir";
 
@@ -21,7 +22,7 @@ export async function GET(request: Request) {
   );
 
   const locations =
-    bundle.entry?.map((e: any) => ({
+    (bundle as any)?.entry?.map((e: any) => ({
       id: e.resource.id,
       name: e.resource.name,
       address: e.resource.address,

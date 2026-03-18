@@ -26,6 +26,13 @@ export default function HomePage() {
           </Link>
           .
         </p>
+        <div className="mt-4 text-sm text-gray-500">
+          Or jump straight to your{" "}
+          <Link href="/dashboard" className="text-[#1A5276] underline">
+            patient dashboard
+          </Link>
+          .
+        </div>
       </div>
     </main>
   );

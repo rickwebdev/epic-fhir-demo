@@ -1,10 +1,12 @@
-import { IronSession, ironSession } from "iron-session";
+import { getIronSession, IronSession } from "iron-session";
 import { cookies } from "next/headers";
 
 export interface EpicSessionData {
   accessToken?: string;
   patientId?: string;
   expiresAt?: number;
+  scope?: string;
+  scp?: string;
 }
 
 const sessionOptions = {
@@ -17,6 +19,6 @@ const sessionOptions = {
 
 export async function getSession(): Promise<IronSession<EpicSessionData>> {
   const cookieStore = await cookies();
-  return ironSession<EpicSessionData>(cookieStore, sessionOptions);
+  return getIronSession<EpicSessionData>(cookieStore, sessionOptions);
 }
 
