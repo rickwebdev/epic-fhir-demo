@@ -168,15 +168,22 @@ export default function DashboardClient() {
 
             <section className="grid gap-4 md:grid-cols-2">
               <div className="bg-white rounded-xl shadow-sm border border-[#D6EAF8] p-6 space-y-3">
-                <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-                  <CalendarDays
-                    className="h-4 w-4 text-[#1A5276]"
-                    aria-hidden="true"
-                  />
-                  Upcoming Appointments
+                <h3 className="flex items-center justify-between gap-3 text-sm font-semibold text-gray-900">
+                  <span className="flex items-center gap-2">
+                    <CalendarDays
+                      className="h-4 w-4 text-[#1A5276]"
+                      aria-hidden="true"
+                    />
+                    Upcoming Appointments
+                  </span>
+                  <span className="shrink-0 rounded-full bg-[#D6EAF8]/70 px-2 py-0.5 text-[11px] font-medium text-[#1A5276]">
+                    {data.appointments.length}
+                  </span>
                 </h3>
                 {data.appointments.length === 0 ? (
-                  <p className="text-sm text-gray-600">No appointments.</p>
+                  <p className="text-sm text-gray-600 py-1">
+                    No appointments.
+                  </p>
                 ) : (
                   <ul className="space-y-3">
                     {data.appointments.slice(0, 6).map((a) => (
@@ -222,15 +229,22 @@ export default function DashboardClient() {
               </div>
 
               <div className="bg-white rounded-xl shadow-sm border border-[#D6EAF8] p-6 space-y-3">
-                <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-                  <FlaskConical
-                    className="h-4 w-4 text-[#1A5276]"
-                    aria-hidden="true"
-                  />
-                  Lab Results
+                <h3 className="flex items-center justify-between gap-3 text-sm font-semibold text-gray-900">
+                  <span className="flex items-center gap-2">
+                    <FlaskConical
+                      className="h-4 w-4 text-[#1A5276]"
+                      aria-hidden="true"
+                    />
+                    Lab Results
+                  </span>
+                  <span className="shrink-0 rounded-full bg-[#D6EAF8]/70 px-2 py-0.5 text-[11px] font-medium text-[#1A5276]">
+                    {data.labs.length}
+                  </span>
                 </h3>
                 {data.labs.length === 0 ? (
-                  <p className="text-sm text-gray-600">No lab observations.</p>
+                  <p className="text-sm text-gray-600 py-1">
+                    No lab observations.
+                  </p>
                 ) : (
                   <ul className="space-y-3">
                     {data.labs.slice(0, 8).map((o) => (
@@ -259,19 +273,24 @@ export default function DashboardClient() {
               </div>
 
               <div className="bg-white rounded-xl shadow-sm border border-[#D6EAF8] p-6 space-y-3">
-                <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-                  <Pill
-                    className="h-4 w-4 text-[#1A5276]"
-                    aria-hidden="true"
-                  />
-                  Active Prescriptions
+                <h3 className="flex items-center justify-between gap-3 text-sm font-semibold text-gray-900">
+                  <span className="flex items-center gap-2">
+                    <Pill
+                      className="h-4 w-4 text-[#1A5276]"
+                      aria-hidden="true"
+                    />
+                    Active Prescriptions
+                  </span>
+                  <span className="shrink-0 rounded-full bg-[#D6EAF8]/70 px-2 py-0.5 text-[11px] font-medium text-[#1A5276]">
+                    {data.medications.length}
+                  </span>
                 </h3>
                 {data.medications.length === 0 ? (
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 py-1">
                     No active MedicationRequest records.
                   </p>
                 ) : (
-                  <ul className="space-y-3">
+                  <ul className="space-y-3 max-h-[420px] overflow-y-auto pr-2">
                     {data.medications.slice(0, 8).map((m) => (
                       (() => {
                         const cleanedDosage = (m.dosage ?? "")
@@ -316,15 +335,22 @@ export default function DashboardClient() {
               </div>
 
               <div className="bg-white rounded-xl shadow-sm border border-[#D6EAF8] p-6 space-y-3">
-                <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-                  <Users
-                    className="h-4 w-4 text-[#1A5276]"
-                    aria-hidden="true"
-                  />
-                  Care Team
+                <h3 className="flex items-center justify-between gap-3 text-sm font-semibold text-gray-900">
+                  <span className="flex items-center gap-2">
+                    <Users
+                      className="h-4 w-4 text-[#1A5276]"
+                      aria-hidden="true"
+                    />
+                    Care Team
+                  </span>
+                  <span className="shrink-0 rounded-full bg-[#D6EAF8]/70 px-2 py-0.5 text-[11px] font-medium text-[#1A5276]">
+                    {data.careTeam.length}
+                  </span>
                 </h3>
                 {data.careTeam.length === 0 ? (
-                  <p className="text-sm text-gray-600">No care team entries.</p>
+                  <p className="text-sm text-gray-600 py-1">
+                    No care team entries.
+                  </p>
                 ) : (
                   <ul className="space-y-3">
                     {data.careTeam.slice(0, 10).map((ct) => (
