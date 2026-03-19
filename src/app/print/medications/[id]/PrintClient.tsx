@@ -1,14 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-
-export default function PrintClient({ autoPrint }: { autoPrint?: boolean }) {
-  useEffect(() => {
-    if (!autoPrint) return;
-    const t = window.setTimeout(() => window.print(), 150);
-    return () => window.clearTimeout(t);
-  }, [autoPrint]);
-
+export default function PrintClient() {
   return (
     <button
       type="button"

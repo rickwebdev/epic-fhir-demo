@@ -105,7 +105,7 @@ export default async function MedicationPrintPage({ params }: PageProps) {
           >
             Back to dashboard
           </Link>
-          <PrintClient autoPrint />
+          <PrintClient />
         </div>
 
         <div className="rounded-2xl border border-gray-200 p-6 shadow-sm print:shadow-none">
