@@ -82,6 +82,11 @@ export async function GET(request: Request) {
     return NextResponse.json(
       {
         authorizeUrl,
+        vercel: {
+          commit: process.env.VERCEL_GIT_COMMIT_SHA ?? "unknown",
+          url: process.env.VERCEL_URL ?? "unknown",
+          nodeEnv: process.env.NODE_ENV ?? "unknown",
+        },
         params: {
           response_type: "code",
           client_id: process.env.EPIC_CLIENT_ID as string,
