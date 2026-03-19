@@ -59,13 +59,21 @@ export async function GET(request: Request) {
     minimal_aud: "fhirUser launch/patient patient/Patient.read",
     openid: "openid fhirUser launch/patient patient/Patient.read",
     openid_aud: "openid fhirUser launch/patient patient/Patient.read",
+    openid_launch_only: "openid fhirUser launch/patient",
+    openid_launch_only_aud: "openid fhirUser launch/patient",
     patient_only: "patient/Patient.read",
+    launch_only: "launch/patient",
+    launch_only_aud: "launch/patient",
   };
 
   const scope = scopeByVariant[variant] ?? scopeByVariant.minimal;
   const includeOpenId = scope.split(/\s+/).includes("openid");
   const nonce = includeOpenId ? crypto.randomUUID() : undefined;
-  const includeAud = variant === "minimal_aud" || variant === "openid_aud";
+  const includeAud =
+    variant === "minimal_aud" ||
+    variant === "openid_aud" ||
+    variant === "openid_launch_only_aud" ||
+    variant === "launch_only_aud";
 
   // Epic/MyChart can be picky about encoding; encodeURIComponent ensures spaces become %20, not '+'.
   const query = [
