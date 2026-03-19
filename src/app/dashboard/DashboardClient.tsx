@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { CalendarDays, FlaskConical, Pill, Users } from "lucide-react";
+import { CalendarDays, FlaskConical, Pill, Printer, Users } from "lucide-react";
 
 type FhirPatient = {
   id?: string;
@@ -299,10 +299,11 @@ export default function DashboardClient() {
                         <div className="mt-3">
                           <Link
                             href={`/print/medications/${encodeURIComponent(m.id)}`}
-                            className="inline-flex items-center text-xs font-medium text-[#1A5276] hover:underline"
+                            className="inline-flex items-center gap-1 rounded-full bg-[#D6EAF8]/70 px-3 py-1 text-xs font-medium text-[#1A5276] hover:bg-[#D6EAF8]"
                             target="_blank"
                             rel="noreferrer"
                           >
+                            <Printer className="h-3.5 w-3.5" aria-hidden="true" />
                             Print
                           </Link>
                         </div>
