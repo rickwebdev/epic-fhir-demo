@@ -260,6 +260,13 @@ export default function DashboardClient() {
                 ) : (
                   <ul className="space-y-3">
                     {data.medications.slice(0, 8).map((m) => (
+                      (() => {
+                        const cleanedDosage = (m.dosage ?? "")
+                          // Epic sandbox sometimes includes a trailing "Print" token in the free-text.
+                          .replace(/\s*,?\s*print\s*$/i, "")
+                          .trim();
+
+                        return (
                       <li
                         key={m.id}
                         className="border border-[#D6EAF8] rounded-lg p-4"
@@ -271,12 +278,24 @@ export default function DashboardClient() {
                           {m.authoredOn ? `Authored: ${m.authoredOn}` : ""}
                           {m.status ? ` · Status: ${m.status}` : ""}
                         </p>
-                        {m.dosage ? (
+                        {cleanedDosage ? (
                           <p className="text-xs text-gray-700 mt-2 leading-relaxed">
-                            Dose: {m.dosage}
+                            Dose: {cleanedDosage}
                           </p>
                         ) : null}
+                        <div className="mt-3">
+                          <Link
+                            href={`/print/medications/${encodeURIComponent(m.id)}`}
+                            className="inline-flex items-center text-xs font-medium text-[#1A5276] hover:underline"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Print
+                          </Link>
+                        </div>
                       </li>
+                        );
+                      })()
                     ))}
                   </ul>
                 )}
