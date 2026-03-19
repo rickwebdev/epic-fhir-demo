@@ -56,6 +56,8 @@ export default function DashboardClient() {
   const [data, setData] = useState<DashboardResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const preloginBgUrl =
+    "https://fhir.epic.com/mychart-fhir/en-us/images/prelogin.jpg";
 
   useEffect(() => {
     let cancelled = false;
@@ -94,8 +96,20 @@ export default function DashboardClient() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#F4F6F7] px-6 py-10">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <main className="min-h-screen relative overflow-hidden px-6 py-10">
+      {/* Full-bleed hero background (Epic pre-login image) */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${preloginBgUrl})` }}
+        aria-hidden="true"
+      />
+      {/* Dark overlay to keep content readable */}
+      <div
+        className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/60"
+        aria-hidden="true"
+      />
+
+      <div className="relative max-w-6xl mx-auto bg-white/90 backdrop-blur rounded-2xl shadow-xl border border-white/20 p-6 space-y-6">
         <header className="flex items-center justify-between gap-6">
           <h1 className="text-2xl font-semibold text-[#1A5276] leading-tight">
             Patient Dashboard
