@@ -11,6 +11,8 @@ interface Provider {
   npi?: string;
   locationName?: string;
   locationAddress?: string;
+  phone?: string;
+  email?: string;
 }
 
 interface PractitionerDebugInfo {
@@ -292,6 +294,12 @@ export default function ProvidersClient() {
                 )}
                 {provider.npi && (
                   <p className="text-xs text-gray-500">NPI: {provider.npi}</p>
+                )}
+                {provider.phone && (
+                  <p className="text-xs text-gray-500">Phone: {provider.phone}</p>
+                )}
+                {provider.email && (
+                  <p className="text-xs text-gray-500">Email: {provider.email}</p>
                 )}
                 {provider.locationName && (
                   <p className="text-xs text-gray-500 mt-1">

@@ -2,6 +2,44 @@
 import { getSession } from "@/lib/session";
 import { fhirFetch, fhirFetchRaw } from "@/lib/fhir";
 
+function normalizeText(x: unknown): string | undefined {
+  if (typeof x !== "string") return undefined;
+  const t = x.trim();
+  return t.length ? t : undefined;
+}
+
+function extractBestPractitionerName(
+  practitioner: any,
+  fallback?: string
+): string | undefined {
+  const p = practitioner;
+  const name0 = p?.name?.[0];
+  const text = normalizeText(name0?.text);
+  if (text) return text;
+
+  const given0 = Array.isArray(name0?.given) ? name0.given?.[0] : name0?.given;
+  const family = name0?.family;
+  const combined = `${given0 ?? ""} ${family ?? ""}`.trim();
+  if (combined.length) return combined;
+
+  const familyOnly = normalizeText(family);
+  if (familyOnly) return familyOnly;
+
+  return normalizeText(fallback);
+}
+
+function extractTelecom(
+  practitioner: any
+): { phone?: string; email?: string } | undefined {
+  const telecom: any[] = Array.isArray(practitioner?.telecom)
+    ? practitioner.telecom
+    : [];
+  const phone = telecom.find((t) => String(t?.system ?? "") === "phone")?.value;
+  const email = telecom.find((t) => String(t?.system ?? "") === "email")?.value;
+  const out = { phone: normalizeText(phone), email: normalizeText(email) };
+  return out.phone || out.email ? out : undefined;
+}
+
 export async function GET(request: Request) {
   const session = await getSession();
 
@@ -11,6 +49,7 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const specialty = searchParams.get("specialty") ?? "";
+  const debug = searchParams.get("debug") === "1";
 
   const token = session.accessToken;
 
@@ -226,7 +265,20 @@ export async function GET(request: Request) {
           String(i.system ?? "").includes("npi")
         )?.value ?? undefined;
 
-      const providerName = `${p.name?.[0]?.given?.[0] ?? ""} ${p.name?.[0]?.family ?? ""}`.trim();
+      const providerName = extractBestPractitionerName(p);
+      const telecom = extractTelecom(p);
+      const nameDebug = debug
+        ? {
+            nameText: normalizeText(p?.name?.[0]?.text),
+            given: Array.isArray(p?.name?.[0]?.given) ? p.name[0].given : undefined,
+            family: normalizeText(p?.name?.[0]?.family),
+            telecomSystems: Array.isArray(p?.telecom)
+              ? p.telecom
+                  .map((t: any) => normalizeText(t?.system))
+                  .filter(Boolean)
+              : [],
+          }
+        : undefined;
 
       // Best-effort location join. Some sandboxes forbid Location searches;
       // we keep this optional so Phase 1 still works.
@@ -263,6 +315,9 @@ export async function GET(request: Request) {
         npi: providerNpi,
         locationName,
         locationAddress,
+        phone: telecom?.phone,
+        email: telecom?.email,
+        ...(nameDebug ? { nameDebug } : {}),
       });
     }
 
@@ -415,7 +470,24 @@ export async function GET(request: Request) {
       const p = practitionerId ? practitionerById[practitionerId] : undefined;
       const loc = locId ? locationById[locId] : undefined;
 
-      const providerName = `${p?.name?.[0]?.given?.[0] ?? ""} ${p?.name?.[0]?.family ?? ""}`.trim();
+      const providerName = extractBestPractitionerName(
+        p,
+        r?.practitioner?.display
+      );
+      const telecom = extractTelecom(p);
+      const nameDebug = debug
+        ? {
+            roleDisplay: normalizeText(r?.practitioner?.display),
+            nameText: normalizeText(p?.name?.[0]?.text),
+            given: Array.isArray(p?.name?.[0]?.given) ? p.name[0].given : undefined,
+            family: normalizeText(p?.name?.[0]?.family),
+            telecomSystems: Array.isArray(p?.telecom)
+              ? p.telecom
+                  .map((t: any) => normalizeText(t?.system))
+                  .filter(Boolean)
+              : [],
+          }
+        : undefined;
 
       const roleSpecialtyCandidates: string[] = [];
       if (Array.isArray(r?.code) && r.code.length > 0) {
@@ -457,6 +529,9 @@ export async function GET(request: Request) {
         npi: providerNpi,
         locationName,
         locationAddress,
+        phone: telecom?.phone,
+        email: telecom?.email,
+        ...(nameDebug ? { nameDebug } : {}),
       };
     });
 
