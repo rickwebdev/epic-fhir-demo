@@ -47,7 +47,7 @@ export async function GET(request: Request) {
   const scope =
     // Keep this minimal for OAuth acceptance in Epic sandbox.
     // We can re-add search scopes later once auth works reliably.
-    "openid fhirUser launch/patient patient/Appointment.read patient/CareTeam.read patient/Location.read patient/Medication.read patient/MedicationRequest.read patient/Observation.read patient/Patient.read patient/Practitioner.read patient/Schedule.read patient/Slot.read";
+    "openid fhirUser launch/patient patient/Patient.read";
   const includeOpenId = scope.split(/\s+/).includes("openid");
   const nonce = includeOpenId ? crypto.randomUUID() : undefined;
 
