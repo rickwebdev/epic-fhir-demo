@@ -44,7 +44,7 @@ export default function ProvidersClient() {
   );
   const [tokenScope, setTokenScope] = useState<string | null>(null);
   const [source, setSource] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const preloginBgUrl =
     "https://fhir.epic.com/mychart-fhir/en-us/images/prelogin.jpg";
@@ -56,7 +56,10 @@ export default function ProvidersClient() {
       const res = await fetch(
         `/api/fhir/practitioners?specialty=${encodeURIComponent(
           selectedSpecialty
-        )}`
+        )}`,
+        {
+          cache: "no-store",
+        }
       );
       if (res.status === 401) {
         setProviders([]);
@@ -211,10 +214,12 @@ export default function ProvidersClient() {
           )}
 
           {loading && (
-            <div className="space-y-3">
-              <div className="h-20 rounded-md bg-gray-200 animate-pulse" />
-              <div className="h-20 rounded-md bg-gray-200 animate-pulse" />
-            </div>
+          <div className="flex flex-col items-center justify-center gap-3 py-10">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#1A5276]/20 border-t-[#1A5276]" />
+            <p className="text-sm font-medium text-[#1A5276]">
+              Loading providers…
+            </p>
+          </div>
           )}
 
           {!loading && providers.length === 0 && !error && (

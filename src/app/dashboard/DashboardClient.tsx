@@ -66,7 +66,9 @@ export default function DashboardClient() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch("/api/dashboard/summary");
+        const res = await fetch("/api/dashboard/summary", {
+          cache: "no-store",
+        });
         if (res.status === 401) {
           setError("Not connected to Epic. Please connect and try again.");
           return;
@@ -142,9 +144,11 @@ export default function DashboardClient() {
         )}
 
         {loading && (
-          <div className="space-y-3">
-            <div className="h-20 rounded-md bg-gray-200 animate-pulse" />
-            <div className="h-20 rounded-md bg-gray-200 animate-pulse" />
+          <div className="flex flex-col items-center justify-center gap-3 py-14">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#1A5276]/20 border-t-[#1A5276]" />
+            <p className="text-sm font-medium text-[#1A5276]">
+              Loading patient dashboard…
+            </p>
           </div>
         )}
 
