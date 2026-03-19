@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Hand } from "lucide-react";
 
 export default function LogoutPage() {
   const preloginBgUrl =
@@ -20,12 +21,10 @@ export default function LogoutPage() {
         <section className="w-full max-w-xl bg-white/90 backdrop-blur rounded-2xl shadow-xl border border-white/20 p-8 space-y-6 text-center">
           <div className="flex justify-center">
             <span className="inline-flex items-center justify-center rounded-full bg-[#D6EAF8]/80 p-4">
-              <span
-                className="text-5xl leading-none origin-bottom animate-wave-hand select-none"
+              <Hand
+                className="h-12 w-12 text-[#1A5276] origin-bottom animate-wave-hand"
                 aria-hidden="true"
-              >
-                👋
-              </span>
+              />
             </span>
           </div>
           <div className="space-y-2">
