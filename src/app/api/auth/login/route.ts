@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
 
+// Prevent Vercel/Next caching so the authorize URL always matches current env + code.
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 function base64UrlEncode(bytes: Uint8Array) {
   return Buffer.from(bytes)
     .toString("base64")
@@ -28,7 +32,12 @@ export async function GET(request: Request) {
         error: "Missing required environment variables",
         missing,
       },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          "Cache-Control": "no-store",
+        },
+      }
     );
   }
 
@@ -70,23 +79,33 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   if (searchParams.get("dryRun") === "1") {
-    return NextResponse.json({
-      authorizeUrl,
-      params: {
-        response_type: "code",
-        client_id: process.env.EPIC_CLIENT_ID as string,
-        redirect_uri: process.env.EPIC_REDIRECT_URI as string,
-        scope,
-        state,
-        ...(nonce ? { nonce } : {}),
-        aud: process.env.EPIC_FHIR_BASE as string,
-        code_challenge: codeChallenge,
-        code_challenge_method: "S256",
+    return NextResponse.json(
+      {
+        authorizeUrl,
+        params: {
+          response_type: "code",
+          client_id: process.env.EPIC_CLIENT_ID as string,
+          redirect_uri: process.env.EPIC_REDIRECT_URI as string,
+          scope,
+          state,
+          ...(nonce ? { nonce } : {}),
+          aud: process.env.EPIC_FHIR_BASE as string,
+          code_challenge: codeChallenge,
+          code_challenge_method: "S256",
+        },
       },
-    });
+      {
+        headers: {
+          "Cache-Control": "no-store",
+        },
+      }
+    );
   }
 
   const response = NextResponse.redirect(authorizeUrl);
+  response.headers.set("Cache-Control", "no-store");
+  response.headers.set("Pragma", "no-cache");
+  response.headers.set("Expires", "0");
 
   response.cookies.set("oauth_state", state, {
     httpOnly: true,
