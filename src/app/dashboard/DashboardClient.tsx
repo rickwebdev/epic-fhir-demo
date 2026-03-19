@@ -276,6 +276,16 @@ export default function DashboardClient() {
                             Dose: {m.dosage}
                           </p>
                         ) : null}
+                        <div className="mt-3">
+                          <Link
+                            href={`/print/medications/${encodeURIComponent(m.id)}`}
+                            className="inline-flex items-center text-xs font-medium text-[#1A5276] hover:underline"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Print
+                          </Link>
+                        </div>
                       </li>
                     ))}
                   </ul>
