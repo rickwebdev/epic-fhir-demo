@@ -49,17 +49,23 @@ export async function GET(request: Request) {
   );
   const codeChallenge = base64UrlEncode(await sha256(codeVerifier));
 
-  // Standalone SMART scope set.
-  // Note: because we request `patient/*.read` scopes, Epic typically expects `launch/patient`
-  // to establish the correct launch context.
-  // Keep aligned with the PRD Epic app registration scope list.
-  const scope =
-    // Keep this minimal for OAuth acceptance in Epic sandbox.
-    // We can re-add search scopes later once auth works reliably.
-    // NOTE: Epic sandbox appears to be picky about SMART scope composition.
-    "fhirUser launch/patient patient/Patient.read";
+  const { searchParams } = new URL(request.url);
+  const variant = searchParams.get("variant") ?? "minimal";
+
+  // Epic sandbox rejects different authorize requests with a generic "request is invalid".
+  // This lets us toggle key OAuth parameters without repeated redeploys.
+  const scopeByVariant: Record<string, string> = {
+    minimal: "fhirUser launch/patient patient/Patient.read",
+    minimal_aud: "fhirUser launch/patient patient/Patient.read",
+    openid: "openid fhirUser launch/patient patient/Patient.read",
+    openid_aud: "openid fhirUser launch/patient patient/Patient.read",
+    patient_only: "patient/Patient.read",
+  };
+
+  const scope = scopeByVariant[variant] ?? scopeByVariant.minimal;
   const includeOpenId = scope.split(/\s+/).includes("openid");
   const nonce = includeOpenId ? crypto.randomUUID() : undefined;
+  const includeAud = variant === "minimal_aud" || variant === "openid_aud";
 
   // Epic/MyChart can be picky about encoding; encodeURIComponent ensures spaces become %20, not '+'.
   const query = [
@@ -69,6 +75,7 @@ export async function GET(request: Request) {
     ["scope", scope],
     ["state", state],
     ...(nonce ? [["nonce", nonce]] : []),
+    ...(includeAud ? [["aud", process.env.EPIC_FHIR_BASE as string]] : []),
     ["code_challenge", codeChallenge],
     ["code_challenge_method", "S256"],
   ]
@@ -77,11 +84,16 @@ export async function GET(request: Request) {
 
   const authorizeUrl = `${process.env.EPIC_AUTH_URL}?${query}`;
 
-  const { searchParams } = new URL(request.url);
   if (searchParams.get("dryRun") === "1") {
     return NextResponse.json(
       {
         authorizeUrl,
+        debug: {
+          version: "oauth-epic-variant-1",
+          variant,
+          includeOpenId,
+          includeAud,
+        },
         vercel: {
           commit: process.env.VERCEL_GIT_COMMIT_SHA ?? "unknown",
           url: process.env.VERCEL_URL ?? "unknown",
@@ -96,6 +108,7 @@ export async function GET(request: Request) {
           ...(nonce ? { nonce } : {}),
           code_challenge: codeChallenge,
           code_challenge_method: "S256",
+          ...(includeAud ? { aud: process.env.EPIC_FHIR_BASE as string } : {}),
         },
       },
       {
