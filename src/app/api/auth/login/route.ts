@@ -45,7 +45,9 @@ export async function GET(request: Request) {
   // to establish the correct launch context.
   // Keep aligned with the PRD Epic app registration scope list.
   const scope =
-    "openid fhirUser launch/patient patient/Patient.read patient/Practitioner.read patient/Practitioner.search patient/Practitioner.Search patient/Appointment.read patient/Appointment.write patient/Observation.read patient/Observation.search patient/Observation.Search patient/MedicationRequest.read patient/MedicationRequest.search patient/MedicationRequest.Search patient/Medication.read patient/Medication.search patient/Medication.Search patient/CareTeam.search patient/CareTeam.Search";
+    // Keep this minimal for OAuth acceptance in Epic sandbox.
+    // We can re-add search scopes later once auth works reliably.
+    "openid fhirUser launch/patient patient/Appointment.read patient/CareTeam.read patient/Location.read patient/Medication.read patient/MedicationRequest.read patient/Observation.read patient/Patient.read patient/Practitioner.read patient/Schedule.read patient/Slot.read";
   const includeOpenId = scope.split(/\s+/).includes("openid");
   const nonce = includeOpenId ? crypto.randomUUID() : undefined;
 
