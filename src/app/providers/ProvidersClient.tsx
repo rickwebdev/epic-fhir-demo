@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
+import { Search, Stethoscope } from "lucide-react";
 
 interface Provider {
   id: string;
@@ -149,7 +150,8 @@ export default function ProvidersClient() {
 
       <div className="relative max-w-4xl mx-auto bg-white/90 backdrop-blur rounded-2xl shadow-xl border border-white/20 p-6 space-y-6">
         <header className="flex items-center justify-between gap-6">
-          <h1 className="text-2xl font-semibold text-[#1A5276]">
+          <h1 className="flex items-center gap-3 text-2xl font-semibold text-[#1A5276]">
+            <Search className="h-6 w-6" aria-hidden="true" />
             Provider Finder
           </h1>
           <nav className="flex items-center gap-6">
@@ -175,7 +177,8 @@ export default function ProvidersClient() {
             onSubmit={handleSubmit}
             className="flex flex-col sm:flex-row gap-4 sm:items-end"
           >
-            <label className="w-full sm:w-auto text-sm font-medium text-gray-700">
+            <label className="w-full sm:w-auto text-sm font-medium text-gray-700 flex items-center gap-2">
+              <Stethoscope className="h-4 w-4 text-[#1A5276]" aria-hidden="true" />
               Specialty
               <select
                 className="mt-1 block w-full sm:w-64 rounded-md border border-gray-300 px-3 py-2 text-sm"

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { CalendarDays, FlaskConical, Pill, Users } from "lucide-react";
 
 type FhirPatient = {
   id?: string;
@@ -167,7 +168,11 @@ export default function DashboardClient() {
 
             <section className="grid gap-4 md:grid-cols-2">
               <div className="bg-white rounded-xl shadow-sm border border-[#D6EAF8] p-6 space-y-3">
-                <h3 className="text-sm font-semibold text-gray-900">
+                <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
+                  <CalendarDays
+                    className="h-4 w-4 text-[#1A5276]"
+                    aria-hidden="true"
+                  />
                   Upcoming Appointments
                 </h3>
                 {data.appointments.length === 0 ? (
@@ -217,7 +222,11 @@ export default function DashboardClient() {
               </div>
 
               <div className="bg-white rounded-xl shadow-sm border border-[#D6EAF8] p-6 space-y-3">
-                <h3 className="text-sm font-semibold text-gray-900">
+                <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
+                  <FlaskConical
+                    className="h-4 w-4 text-[#1A5276]"
+                    aria-hidden="true"
+                  />
                   Lab Results
                 </h3>
                 {data.labs.length === 0 ? (
@@ -250,7 +259,11 @@ export default function DashboardClient() {
               </div>
 
               <div className="bg-white rounded-xl shadow-sm border border-[#D6EAF8] p-6 space-y-3">
-                <h3 className="text-sm font-semibold text-gray-900">
+                <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
+                  <Pill
+                    className="h-4 w-4 text-[#1A5276]"
+                    aria-hidden="true"
+                  />
                   Active Prescriptions
                 </h3>
                 {data.medications.length === 0 ? (
@@ -302,7 +315,11 @@ export default function DashboardClient() {
               </div>
 
               <div className="bg-white rounded-xl shadow-sm border border-[#D6EAF8] p-6 space-y-3">
-                <h3 className="text-sm font-semibold text-gray-900">
+                <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
+                  <Users
+                    className="h-4 w-4 text-[#1A5276]"
+                    aria-hidden="true"
+                  />
                   Care Team
                 </h3>
                 {data.careTeam.length === 0 ? (
