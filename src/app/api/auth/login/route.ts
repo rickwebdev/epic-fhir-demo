@@ -69,7 +69,6 @@ export async function GET(request: Request) {
     ["scope", scope],
     ["state", state],
     ...(nonce ? [["nonce", nonce]] : []),
-    ["aud", process.env.EPIC_FHIR_BASE as string],
     ["code_challenge", codeChallenge],
     ["code_challenge_method", "S256"],
   ]
@@ -90,7 +89,6 @@ export async function GET(request: Request) {
           scope,
           state,
           ...(nonce ? { nonce } : {}),
-          aud: process.env.EPIC_FHIR_BASE as string,
           code_challenge: codeChallenge,
           code_challenge_method: "S256",
         },
