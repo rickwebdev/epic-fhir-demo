@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
-import { LayoutDashboard, Search, Stethoscope } from "lucide-react";
+import { Search, Stethoscope } from "lucide-react";
 
 interface Provider {
   id: string;
@@ -159,9 +159,8 @@ export default function ProvidersClient() {
           <nav className="flex items-center gap-6">
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-2 py-2 text-sm font-medium text-[#1A5276] hover:underline"
+              className="inline-flex items-center py-2 text-sm font-medium text-[#1A5276] hover:underline"
             >
-              <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
               Patient Dashboard
             </Link>
             <form action="/api/auth/logout" method="POST" className="m-0 inline">

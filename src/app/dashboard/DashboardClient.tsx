@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { CalendarDays, FlaskConical, Pill, Printer, Users } from "lucide-react";
+import { CalendarDays, FlaskConical, LayoutDashboard, Pill, Printer, Users } from "lucide-react";
 
 type FhirPatient = {
   id?: string;
@@ -114,7 +114,8 @@ export default function DashboardClient() {
 
       <div className="relative max-w-6xl mx-auto bg-white/90 backdrop-blur rounded-2xl shadow-xl border border-white/20 p-6 space-y-6">
         <header className="flex items-center justify-between gap-6">
-          <h1 className="text-2xl font-semibold text-[#1A5276] leading-tight">
+          <h1 className="flex items-center gap-3 text-2xl font-semibold text-[#1A5276] leading-tight">
+            <LayoutDashboard className="h-6 w-6" aria-hidden="true" />
             Patient Dashboard
           </h1>
           <nav className="flex items-center gap-6">
