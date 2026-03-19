@@ -45,7 +45,9 @@ export async function GET(request: Request) {
 
   // PKCE (required for public clients)
   const codeVerifier = base64UrlEncode(
-    crypto.getRandomValues(new Uint8Array(32))
+    // Epic sandbox appears picky about PKCE inputs; use a longer verifier
+    // to keep well within RFC 7636 bounds (43-128 chars).
+    crypto.getRandomValues(new Uint8Array(64))
   );
   const codeChallenge = base64UrlEncode(await sha256(codeVerifier));
 
