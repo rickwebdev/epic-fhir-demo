@@ -40,10 +40,8 @@ export async function GET(request: Request) {
   cookieStore.delete("pkce_verifier");
 
   if (!pkceVerifier) {
-    return NextResponse.json(
-      { error: "Missing PKCE verifier" },
-      { status: 400 }
-    );
+    // Some Epic client configs may not require PKCE.
+    // If we didn't set pkce_verifier (e.g. pkce=0), we proceed without it.
   }
 
   const body = new URLSearchParams({
@@ -51,8 +49,11 @@ export async function GET(request: Request) {
     code,
     redirect_uri: process.env.EPIC_REDIRECT_URI as string,
     client_id: process.env.EPIC_CLIENT_ID as string,
-    code_verifier: pkceVerifier,
   });
+
+  if (pkceVerifier) {
+    body.set("code_verifier", pkceVerifier);
+  }
 
   const tokenRes = await fetch(tokenUrlFinal, {
     method: "POST",

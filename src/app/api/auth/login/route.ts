@@ -53,6 +53,7 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const variant = searchParams.get("variant") ?? "minimal";
+  const pkceEnabled = searchParams.get("pkce") !== "0";
 
   // Epic sandbox rejects different authorize requests with a generic "request is invalid".
   // This lets us toggle key OAuth parameters without repeated redeploys.
@@ -86,8 +87,12 @@ export async function GET(request: Request) {
     ["state", state],
     ...(nonce ? [["nonce", nonce]] : []),
     ...(includeAud ? [["aud", process.env.EPIC_FHIR_BASE as string]] : []),
-    ["code_challenge", codeChallenge],
-    ["code_challenge_method", "S256"],
+    ...(pkceEnabled
+      ? [
+          ["code_challenge", codeChallenge],
+          ["code_challenge_method", "S256"],
+        ]
+      : []),
   ]
     .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
     .join("&");
@@ -116,8 +121,9 @@ export async function GET(request: Request) {
           scope,
           state,
           ...(nonce ? { nonce } : {}),
-          code_challenge: codeChallenge,
-          code_challenge_method: "S256",
+          ...(pkceEnabled
+            ? { code_challenge: codeChallenge, code_challenge_method: "S256" }
+            : {}),
           ...(includeAud ? { aud: process.env.EPIC_FHIR_BASE as string } : {}),
         },
       },
@@ -141,12 +147,16 @@ export async function GET(request: Request) {
     secure: process.env.NODE_ENV === "production",
   });
 
-  response.cookies.set("pkce_verifier", codeVerifier, {
-    httpOnly: true,
-    maxAge: 300,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-  });
+  if (pkceEnabled) {
+    response.cookies.set("pkce_verifier", codeVerifier, {
+      httpOnly: true,
+      maxAge: 300,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+    });
+  } else {
+    response.cookies.delete("pkce_verifier");
+  }
 
   return response;
 }
