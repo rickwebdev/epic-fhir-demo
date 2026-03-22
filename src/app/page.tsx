@@ -49,6 +49,33 @@ export default function HomePage() {
             </form>
           </div>
 
+          <div className="rounded-xl border border-[#D6EAF8] bg-[#F8FCFE] px-4 py-3 text-left space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#1A5276] text-center">
+              Open Epic sandbox — test logins
+            </p>
+            <p className="text-xs text-gray-600 text-center">
+              After you click Connect, Epic may prompt for credentials. Use any
+              of these dummy accounts (password is the same for each).
+            </p>
+            <dl className="grid gap-2 text-sm">
+              <div className="flex flex-wrap items-baseline justify-between gap-2 border-t border-[#D6EAF8]/80 pt-2">
+                <dt className="text-gray-500">Username</dt>
+                <dd className="font-mono text-gray-900">fhirjason</dd>
+              </div>
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <dt className="text-gray-500">Username</dt>
+                <dd className="font-mono text-gray-900">fhircamila</dd>
+              </div>
+              <div className="flex flex-wrap items-baseline justify-between gap-2 border-t border-[#D6EAF8]/80 pt-2">
+                <dt className="text-gray-500">Password (both)</dt>
+                <dd className="font-mono text-gray-900">epicepic1</dd>
+              </div>
+            </dl>
+            <p className="text-[11px] text-gray-500 text-center pt-1">
+              Demo-only; do not reuse these outside the sandbox.
+            </p>
+          </div>
+
           <div className="space-y-2 pt-1">
             <p className="text-sm text-gray-500">
               Sandbox demo: each login has limited patient data, so what you
