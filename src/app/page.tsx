@@ -38,24 +38,13 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="space-y-3">
-            <form action="/api/auth/login" method="GET">
-              <button
-                type="submit"
-                className="w-full rounded-md bg-[#1A5276] px-4 py-2 text-white font-medium hover:bg-[#16425f] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A5276]/40"
-              >
-                Connect to Epic
-              </button>
-            </form>
-          </div>
-
           <div className="rounded-xl border border-[#D6EAF8] bg-[#F8FCFE] px-4 py-3 text-left space-y-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-[#1A5276] text-center">
               Open Epic sandbox — test logins
             </p>
             <p className="text-xs text-gray-600 text-center">
-              After you click Connect, Epic may prompt for credentials. Use any
-              of these dummy accounts (password is the same for each).
+              When Epic prompts for login, use any of these dummy accounts
+              (password is the same for each).
             </p>
             <dl className="grid gap-2 text-sm">
               <div className="flex flex-wrap items-baseline justify-between gap-2 border-t border-[#D6EAF8]/80 pt-2">
@@ -74,6 +63,17 @@ export default function HomePage() {
             <p className="text-[11px] text-gray-500 text-center pt-1">
               Demo-only; do not reuse these outside the sandbox.
             </p>
+          </div>
+
+          <div className="space-y-3">
+            <form action="/api/auth/login" method="GET">
+              <button
+                type="submit"
+                className="w-full rounded-md bg-[#1A5276] px-4 py-2 text-white font-medium hover:bg-[#16425f] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A5276]/40"
+              >
+                Connect to Epic
+              </button>
+            </form>
           </div>
 
           <div className="space-y-2 pt-1">
